@@ -7,6 +7,15 @@ interface GridProps {
   bombs: number;
 }
 
+interface GridTemplate {
+  i: number;
+  j: number;
+  isBomb: boolean;
+  neighborValue: number;
+  revealed: boolean;
+  isFlag: boolean;
+}
+
 export default function Grid({ width, height, bombs }: GridProps) {
   const [firstClick, setFirstClick] = useState(false);
   const [gridTiles, setGridTile] = useState(
@@ -79,7 +88,7 @@ export default function Grid({ width, height, bombs }: GridProps) {
   }
 
   function revealEmptyTiles(startingRow: number, startingCol: number) {
-    function reveal(grid, i: number, j: number) {
+    function reveal(grid: GridTemplate[][], i: number, j: number) {
       const directions = [
         [i - 1, j - 1], //DiagUpperLeft
         [i - 1, j], //Up
@@ -132,6 +141,7 @@ export default function Grid({ width, height, bombs }: GridProps) {
     i: number,
     j: number
   ) {
+    e.preventDefault();
     if (!firstClick) {
       placeBombs(i, j);
       setFirstClick(true);
