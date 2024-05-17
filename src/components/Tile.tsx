@@ -17,16 +17,17 @@ export default function Tile({
 }: TileProps) {
   let tileText = "";
 
+  if (isFlag) {
+    tileText = "🚩";
+  }
   if (revealed) {
-    if (isBomb) {
+    if (isFlag && !isBomb) {
+      tileText = "❌";
+    } else if (isBomb) {
       tileText = "💣";
     } else if (neighborValue) {
       tileText = `${neighborValue}`;
     }
-  }
-
-  if (isFlag) {
-    tileText = "🚩";
   }
 
   return (
@@ -37,7 +38,7 @@ export default function Tile({
       onClick={!revealed && !isFlag ? onClick : undefined}
       onContextMenu={!revealed ? onContextMenu : undefined}
     >
-      {tileText}
+      <div className="text-xl">{tileText}</div>
     </div>
   );
 }

@@ -17,6 +17,7 @@ interface GridTemplate {
 }
 
 export default function Grid({ width, height, bombs }: GridProps) {
+  const [remainingTiles, setRemainingTiles] = useState(width * height - bombs);
   const [firstClick, setFirstClick] = useState(false);
   const [gridTiles, setGridTile] = useState(
     Array.from(Array(height), (_, i) =>
@@ -101,7 +102,10 @@ export default function Grid({ width, height, bombs }: GridProps) {
       ];
 
       //Show the Tile
-      if (!grid[i][j].isFlag) grid[i][j].revealed = true;
+      if (!grid[i][j].isFlag) {
+        grid[i][j].revealed = true;
+        setRemainingTiles((prevRemaining) => prevRemaining - 1);
+      }
 
       //If the tile has no bombs next to it, we show nearby tiles
       if (grid[i][j].neighborValue == 0) {
@@ -155,6 +159,10 @@ export default function Grid({ width, height, bombs }: GridProps) {
 
     //Reveal Empty tiles
     revealEmptyTiles(i, j);
+
+    if (remainingTiles == 1) {
+      alert("You Win!");
+    }
   }
 
   function revealBoard() {
@@ -169,10 +177,10 @@ export default function Grid({ width, height, bombs }: GridProps) {
 
   return (
     <div
-      className="grid w-96 h-96 mx-auto"
+      className="grid w-5/6 h-5/6 max-w-7xl max-h-full mx-auto"
       style={{
         gridTemplateColumns: `repeat(${width}, minmax(0, 1fr))`,
-        gridTemplateRows: `repeat(${height}, minmax(0, 1fr))`,
+        gridTemplateRows: `repeat(${height}, minmax(0, 3em))`,
       }}
     >
       {gridTiles.map((gridRows) =>
